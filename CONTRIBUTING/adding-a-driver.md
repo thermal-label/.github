@@ -1,8 +1,11 @@
 # Adding a driver
 
-> **Status:** stub — the full guide is being drafted as a spin-off plan
-> ([`plans/backlog/adding-a-driver-guide.md`](../plans/backlog/adding-a-driver-guide.md)).
-> What's below is the bare-minimum orientation. Expect this file to grow.
+> **Status:** stub — the full guide is being drafted under the broader
+> [driver authoring + hardware coverage plan](../plans/backlog/driver-and-hardware-ecosystem.md).
+> That plan covers writing this guide *plus* the unified hardware-status
+> system, the verification flow, and the per-driver
+> `verification-checklist.md` files. What's below is the bare-minimum
+> orientation. Expect this file to grow.
 
 This is the path for adding a new printer family to the **thermal-label**
 ecosystem. It is _not_ for adding a new device to an existing driver — for that,
