@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Documentation
+    url: https://thermal-label.github.io/
+    about: Check the docs first — getting started, hardware list, API reference, and per-driver guides.
+  - name: Discussions (ideas, Q&A, show & tell)
+    url: https://github.com/thermal-label/.github/discussions
+    about: General questions, ideas, and "show & tell" go to org-level Discussions.

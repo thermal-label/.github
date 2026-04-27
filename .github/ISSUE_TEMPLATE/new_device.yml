@@ -1,0 +1,66 @@
+name: New device support
+description: Request support for a printer not currently on a driver's compatibility list.
+title: "New device: [Device name] ([PID])"
+labels: ["hardware", "new-device"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        File this on the **driver repository** for the printer family
+        (`thermal-label/brother-ql`, `thermal-label/labelmanager`, or `thermal-label/labelwriter`).
+
+        Vendor IDs we know about:
+        - Brother QL series — `0x04F9`
+        - DYMO LabelWriter / LabelManager — `0x0922`
+
+  - type: input
+    id: model
+    attributes:
+      label: Device model
+      placeholder: "e.g. QL-820NWBc, LabelManager PnP, LabelWriter Wireless"
+    validations:
+      required: true
+
+  - type: input
+    id: pid
+    attributes:
+      label: USB PID
+      description: "Find it with `lsusb` (Linux/macOS) or Device Manager (Windows)."
+      placeholder: "e.g. 0x209d"
+    validations:
+      required: true
+
+  - type: textarea
+    id: lsusb
+    attributes:
+      label: "`lsusb` output"
+      description: "Paste the relevant line from `lsusb` so we can see VID/PID/strings together."
+      render: shell
+      placeholder: "Bus 003 Device 044: ID 04f9:209d Brother Industries, Ltd QL-820NWB Label Printer"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: tried
+    attributes:
+      label: Did the driver's `list` command see the device?
+      options:
+        - "Yes — device appeared in the list but couldn't be used"
+        - "Yes — device worked end-to-end (file as Hardware verification instead)"
+        - "No — device did not appear"
+        - "Did not try"
+    validations:
+      required: true
+
+  - type: textarea
+    id: capabilities
+    attributes:
+      label: Known capabilities
+      description: "Optional. Anything you know from the product page or your own testing."
+      placeholder: "e.g. Two-color printing, network connectivity, auto-cut, wide format…"
+
+  - type: input
+    id: product_page
+    attributes:
+      label: Product page or purchase link
+      placeholder: "https://…"

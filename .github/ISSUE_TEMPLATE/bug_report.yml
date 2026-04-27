@@ -1,0 +1,77 @@
+name: Bug report
+description: Something isn't working as expected.
+title: "Bug: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the report. Please file this on the **specific repository** that owns
+        the affected package — the URL bar tells you which repo you are on.
+
+  - type: textarea
+    id: what_happened
+    attributes:
+      label: What happened?
+      description: What did you expect, and what actually happened instead?
+      placeholder: "e.g. openPrinter() throws LIBUSB_ERROR_ACCESS on first call but works after reconnecting…"
+    validations:
+      required: true
+
+  - type: textarea
+    id: repro
+    attributes:
+      label: Minimal reproduction
+      description: The smallest piece of code that triggers the bug. Omit if it's a CLI-only issue.
+      render: typescript
+
+  - type: input
+    id: package
+    attributes:
+      label: Affected package
+      description: "Full npm name, e.g. `@thermal-label/brother-ql-node` or `thermal-label-cli`."
+      placeholder: "@thermal-label/<package>"
+    validations:
+      required: true
+
+  - type: input
+    id: pkg_version
+    attributes:
+      label: Package version
+      placeholder: "e.g. 0.3.1  (run: pnpm list <package>)"
+    validations:
+      required: true
+
+  - type: input
+    id: node_version
+    attributes:
+      label: Node version
+      description: "Only required if the bug is on the Node side."
+      placeholder: "e.g. v24.0.0  (run: node -v)"
+
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating system
+      options:
+        - Linux
+        - macOS
+        - Windows
+        - Browser (WebUSB / WebHID / Web Bluetooth / Web Serial)
+      multiple: false
+    validations:
+      required: true
+
+  - type: input
+    id: printer
+    attributes:
+      label: Printer model and connection
+      description: "If hardware-related: model + how it's connected (USB / TCP / WebUSB / Bluetooth)."
+      placeholder: "e.g. QL-820NWB over USB"
+
+  - type: textarea
+    id: error
+    attributes:
+      label: Error output
+      description: Full error message, stack trace, or terminal output.
+      render: shell

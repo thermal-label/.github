@@ -1,0 +1,84 @@
+name: Hardware verification
+description: Report your testing results for a printer — works, partial, or broken.
+title: "Hardware: [Device name] ([PID])"
+labels: ["hardware"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to test! Fill in what you can — even partial results help.
+        File this on the **driver repository** for the printer family
+        (`thermal-label/brother-ql`, `thermal-label/labelmanager`, or `thermal-label/labelwriter`).
+
+  - type: dropdown
+    id: result
+    attributes:
+      label: Result
+      description: What was the overall outcome?
+      options:
+        - "Works perfectly"
+        - "Partially works"
+        - "Does not work"
+    validations:
+      required: true
+
+  - type: input
+    id: model
+    attributes:
+      label: Device model
+      placeholder: "e.g. QL-710W, LabelWriter 450, LabelManager PnP"
+    validations:
+      required: true
+
+  - type: input
+    id: pid
+    attributes:
+      label: USB PID
+      description: "Find with `lsusb` (Linux/macOS) or Device Manager (Windows). Use `0x….` form."
+      placeholder: "e.g. 0x2044"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: connection
+    attributes:
+      label: Connection type tested
+      multiple: true
+      options:
+        - USB
+        - TCP (network)
+        - WebUSB (browser)
+        - WebHID (browser)
+        - Web Bluetooth (browser)
+        - Web Serial (browser)
+    validations:
+      required: true
+
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating system
+      options:
+        - Linux
+        - macOS
+        - Windows
+      multiple: false
+    validations:
+      required: true
+
+  - type: input
+    id: pkg_version
+    attributes:
+      label: Package version tested
+      placeholder: "e.g. @thermal-label/brother-ql-node@0.3.1"
+    validations:
+      required: true
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: What worked, what didn't, anything weird?
+      description: List + text format both fine. Include partial failures, workarounds, surprising behaviour.
+      placeholder: "e.g. TCP print works but auto-cut doesn't trigger; status command times out on second call…"
+    validations:
+      required: true
