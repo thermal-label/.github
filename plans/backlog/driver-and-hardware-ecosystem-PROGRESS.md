@@ -93,12 +93,22 @@
 
 ## Phase 4 — Full driver authoring guide
 
-- [ ] Replace `CONTRIBUTING/adding-a-driver.md` stub with full guide (§E)
-- [ ] Cross-link verification + status material
+- [x] Replaced `CONTRIBUTING/adding-a-driver.md` stub with full guide
+- [x] Cross-linked verification + status material (§10 Hardware coverage from day one)
+
+### Phase 4 notes
+- Guide leans heavily on existing drivers as worked examples ("see X")
+  rather than re-explaining every detail. This keeps the doc maintainable —
+  the source of truth stays in the repos that drift.
+- The guide explicitly tells driver authors to seed `hardware-status.yaml`
+  + `verification-checklist.md` on day one (§10), so the unified
+  `/hardware/` page is populated from the moment a driver ships.
+- §11 documents the docs-site fragment include directive that drivers
+  need at the bottom of `docs/hardware.md`.
 
 ### Gate
-- [ ] Markdown links resolve (manual scan)
-- [ ] commit
+- [x] Markdown links resolve (visual scan)
+- [ ] commit (next)
 
 ---
 
