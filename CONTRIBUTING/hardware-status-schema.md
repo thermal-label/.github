@@ -39,7 +39,7 @@ not rendered as pages and don't show up in the sidebar.
 | Field | Type | Required | Notes |
 |---|---|---|---|
 | `pid` | integer (hex) | yes | Matches a `pid` value in the driver core's `DEVICES` registry. |
-| `name` | string | yes | Display name. **Cached** from `DEVICES[byPid].name`; the validator enforces equality (write-through cache, see [I4](../plans/backlog/driver-and-hardware-ecosystem-DECISIONS.md#i4)). |
+| `name` | string | yes | Display name. **Cached** from `DEVICES[byPid].name`; the validator enforces equality (write-through cache, see [I4](../plans/implemented/driver-and-hardware-ecosystem-DECISIONS.md#i4)). |
 | `status` | enum | yes | `verified` \| `partial` \| `broken` \| `untested`. |
 | `transports` | mapping | no | Per-transport status. Keys ∈ `usb`, `tcp`, `webusb`, `web-bluetooth`, `web-serial`, `serial`. Values ∈ same status enum. Only transports declared in `DEVICES[byPid].transports` may appear. Omit a key for "n/a". |
 | `lastVerified` | ISO date | yes | `YYYY-MM-DD`. Must be ≥ the latest `reports[].date`. |
@@ -58,7 +58,7 @@ not rendered as pages and don't show up in the sidebar.
 | `result` | enum | yes | One of the four status values. |
 | `os` | enum | no | `Linux` \| `macOS` \| `Windows`. |
 | `notes` | string | no | Free-form report notes from the issue. |
-| `selfVerified` | boolean | no | `true` when the reporter is a maintainer verifying on their own bench. Defaults to `false`. See [I7](../plans/backlog/driver-and-hardware-ecosystem-DECISIONS.md#i7). |
+| `selfVerified` | boolean | no | `true` when the reporter is a maintainer verifying on their own bench. Defaults to `false`. See [I7](../plans/implemented/driver-and-hardware-ecosystem-DECISIONS.md#i7). |
 
 ## Status semantics
 

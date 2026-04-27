@@ -114,6 +114,31 @@
 
 ## Phase 5 — Maintainer runbook + finalize
 
-- [ ] `CONTRIBUTING/maintainer-runbook.md`
-- [ ] Move plan + progress + decisions from `plans/backlog/` to `plans/implemented/`
-- [ ] Final commit
+- [x] `CONTRIBUTING/maintainer-runbook.md` — triage flow, YAML edit
+      conventions, device-addition flow, quirks editorial guidance,
+      docs-site sync, cadence
+- [x] CONTRIBUTING/README.md index updated to link the new guides
+      (verifying-hardware, hardware-status-schema, maintainer-runbook)
+- [x] Plan + progress + decisions moved from `plans/backlog/` to
+      `plans/implemented/`
+- [x] Final commit
+
+## Final summary
+
+Across 4 repos, 14 commits:
+
+| Repo | Commits |
+|---|---|
+| `thermal-label/.github`              | 5 (schema doc, decisions, progress, verifying-hardware, adding-a-driver, maintainer-runbook, plan move) |
+| `thermal-label/brother-ql`           | 3 (P1 validator+seed, P2 include, P3 checklist) |
+| `thermal-label/labelmanager`         | 3 (P1 validator+seed, P2 include, P3 checklist) |
+| `thermal-label/labelwriter`          | 3 (P1 validator+seed, P2 include, P3 checklist) |
+| `thermal-label/thermal-label.github.io` | 3 (P2 unified page, P2 include exclude, P3 sidebar) |
+
+Gates run clean on every commit boundary:
+
+- All 3 driver repos: `pnpm typecheck`, `pnpm lint`, `pnpm test`,
+  `pnpm validate:hardware-status` pass.
+- Docs site: `npm run docs:build` succeeds with all routes
+  generated (unified page, 3 verification checklists, per-driver
+  fragments included).

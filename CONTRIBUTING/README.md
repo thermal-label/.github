@@ -31,6 +31,13 @@ guide that matches what you want to do.
 
 - [**Adding a driver**](./adding-a-driver.md) — how to wire a new printer family
   into the layered architecture.
+- [**Verifying hardware**](./verifying-hardware.md) — what to run on your
+  printer and how to file a verification report.
+- [**Hardware-status schema**](./hardware-status-schema.md) — canonical
+  schema for the per-driver `docs/hardware-status.yaml` files.
+- [**Maintainer runbook**](./maintainer-runbook.md) — operational guide
+  for processing verification reports, adding devices, and keeping the
+  docs site in sync.
 - [**Release process**](./release-process.md) — how packages get bumped and
   published.
 - [**Docs conventions**](./docs-conventions.md) — what each repo's `docs/`

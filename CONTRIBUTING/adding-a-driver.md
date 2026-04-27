@@ -449,7 +449,7 @@ The docs site pins `@thermal-label/<driver>-core` versions in its
 `package.json` so the unified `/hardware/` page can read DEVICES
 directly. After your release, open a PR on the docs site bumping
 your `*-core` to the new version. (Per the
-[plan decisions](../plans/backlog/driver-and-hardware-ecosystem-DECISIONS.md#i3),
+[plan decisions](../plans/implemented/driver-and-hardware-ecosystem-DECISIONS.md#i3),
 this is manual for now.)
 
 For a brand-new driver, you'll also extend the docs site's:
