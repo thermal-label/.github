@@ -313,16 +313,93 @@ new build script `scripts/build-hardware-page.mjs` that:
 
 4. Writes `docs/hardware/index.md` with the table + filters explainer.
 
-The page also gets:
+### Page chrome (above the table)
 
-- **Filter chips** (client-side) for family, status, transport.
 - A **"verify your device"** call-to-action linking to the verification
   guide and the issue template.
-- **Per-row links** to the per-driver `/<repo>/hardware` deep page.
-- **A "quirks" indicator** on devices that have a `quirks:` entry — small
-  badge in the row, expanding (or linking) to the full quirk text. Quirky
-  devices also surface in a separate "Read these first" section above the
-  main table for buyers who skim.
+- A **"Read these first"** section listing devices that have a `quirks:`
+  entry, so buyers who skim see the caveats before scrolling.
+- A **counts strip**: total devices · X verified · Y partial · Z broken
+  · N untested. Helps frame the rest of the page.
+
+### Interactive table (browser-side, no extra deps)
+
+A small Vue component (`HardwareTable.vue`) reads the data the build
+script emits and renders an interactive table. No external libraries —
+Vue's reactivity handles all of this.
+
+**Sorting:**
+
+- Clickable column headers cycle: ascending → descending → unsorted.
+- Default sort: family asc, then model asc.
+- Sortable columns: family, model, status (verified > partial > broken
+  > untested), last verified (newest first / oldest first), package
+  version (semver-aware).
+- Visual indicator (▲ / ▼) next to the active sort column.
+
+**Filtering — facets, multi-select within a facet, AND across facets:**
+
+| Facet | Options | Behaviour |
+|---|---|---|
+| Family | brother-ql, labelmanager, labelwriter, … | Shown as chips; click to toggle. |
+| Status | verified, partial, broken, untested | Each chip shows a count: `Verified (12)`. |
+| Transport | usb, tcp, webusb, web-bluetooth, web-serial, serial | Filters to devices that have *any* status entry for the selected transport(s). |
+| Has quirks | toggle | Shortcut to the "Read these first" cohort. |
+
+When a facet has no chips selected, it doesn't filter (shows all). When
+multiple chips are selected within a facet, behaviour is OR (any match
+counts). Across facets, behaviour is AND.
+
+**Text search:**
+
+- Single text input above the table.
+- Matches against model name (case-insensitive substring) and PID
+  (hex or decimal — `0x209d`, `209d`, `8349` all match).
+- Search composes with facet filters (further AND).
+
+**URL state:**
+
+- Active facets + search term + sort serialize to the URL hash so a
+  filtered view is shareable. Example:
+  `/hardware/#status=verified&transport=webusb&sort=lastVerified-desc`.
+- Reading the hash on load restores the view.
+
+**No-results state:**
+
+- "No devices match these filters." with a "Clear filters" button.
+
+**Per-row affordances:**
+
+- Per-row link to the per-driver `/<repo>/hardware` deep page.
+- A **quirks indicator** on devices with a `quirks:` entry — clickable
+  badge that expands the row to show the full quirk text inline (or
+  links into the per-driver hardware page anchor that holds it).
+- A **reports indicator** showing report count and a chevron to expand
+  the row's `reports[]` history.
+
+### Accessibility
+
+- Real `<table>` markup, not div-based; column headers are `<th>` with
+  `scope="col"`.
+- Sort buttons have `aria-sort` reflecting the active state.
+- Filter chips are `<button aria-pressed>` so screen readers announce
+  toggle state.
+- Keyboard: tab through chips and headers; Enter/Space toggles them.
+- Search input has a visible label (`<label for="…">`), not just a
+  placeholder.
+
+### Build script ↔ component split
+
+`scripts/build-hardware-page.mjs` does no rendering. It produces:
+
+1. `docs/hardware/index.md` — the page chrome (intro, "Read these first"
+   callouts, the `<HardwareTable />` component invocation, footer).
+2. `docs/hardware/_data.json` — the merged dataset (every device across
+   every driver), imported by the Vue component at runtime.
+
+The component handles all interaction. Splitting the data out means a
+single rebuild on data change without touching the chrome, and the
+JSON is a clean cache-bustable artifact.
 
 ### Per-driver `/<repo>/hardware` page enhancements
 
@@ -503,12 +580,18 @@ Each phase is independently shippable.
 ### Phase 2 — docs site unified page
 
 1. Bump the docs site's `*-core` deps to latest published versions.
-2. Write `scripts/build-hardware-page.mjs` (merges `DEVICES` + each repo's
-   pulled `hardware-status.yaml` → markdown table).
-3. Wire into `docs:build` after `docs:pull`.
-4. Add `/hardware/` to the top-level nav.
-5. Inject the per-driver status fragment into each `/<repo>/hardware`
+2. Write `scripts/build-hardware-page.mjs`. Output:
+   - `docs/hardware/index.md` — page chrome + `<HardwareTable />`
+     invocation
+   - `docs/hardware/_data.json` — merged dataset
+3. Build `HardwareTable.vue` Vue component (sort, filter, search, URL
+   state, accessibility per §C). Self-contained, no extra deps.
+4. Wire build script into `docs:build` after `docs:pull`.
+5. Add `/hardware/` to the top-level nav.
+6. Inject the per-driver status fragment into each `/<repo>/hardware`
    page.
+7. Smoke-test the interactive table: every facet toggles, sorts work,
+   search finds devices by name and PID, URL hash restores state.
 
 ### Phase 3 — verification guide
 
@@ -634,13 +717,14 @@ warrant their own callout.
 ## Effort estimate
 
 - Phase 1 (schema + seed): 1 sitting
-- Phase 2 (unified page): 2 sittings (script + integration + styling)
+- Phase 2 (unified page): 3 sittings (build script + Vue table component
+  with sort/filter/search/URL state + integration + styling)
 - Phase 3 (verification guide): 1-2 sittings (depends on per-driver
   checklist depth)
 - Phase 4 (driver authoring guide): 2-3 sittings of focused writing
 - Phase 5 (maintainer runbook): 0.5 sitting
 
-Total: **~7–9 sittings of focused work**, plus review.
+Total: **~8–10 sittings of focused work**, plus review.
 
 The driver authoring guide is the largest single piece. The hardware
 coverage system is a collection of small pieces that compose into
