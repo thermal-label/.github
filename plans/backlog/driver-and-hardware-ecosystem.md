@@ -149,7 +149,7 @@ devices:
       webusb: verified
     lastVerified: 2026-04-15            # ISO date
     packageVersion: '0.2.0'             # of @thermal-label/<driver>-node at time of report
-    notes: |                            # optional, freeform; markdown OK
+    notes: |                            # optional, verification observations; markdown OK
       Two-color printing on DK-22251 confirmed. Auto-cut works on USB and TCP.
     reports:                            # one entry per accepted verification issue
       - issue: 42
@@ -175,6 +175,27 @@ devices:
         date: 2026-03-10
         result: partial
         os: macOS
+
+  # Example of a "Frankenstein" device that needs editorial context. The
+  # `quirks` field is written by maintainers (not derived from reports)
+  # and renders as a prominent callout on the docs site so users know to
+  # read it before buying or wiring up the device.
+  - pid: 0x1001
+    name: LabelManager PnP
+    status: verified
+    transports:
+      usb: verified
+    lastVerified: 2026-04-20
+    packageVersion: '0.2.0'
+    quirks: |
+      Boots in **mass-storage mode** by default — Windows / macOS auto-mount
+      a virtual CD with the vendor's installer, which steals the USB
+      interface. The driver detects this and exposes `isMassStorageMode()`;
+      Linux users typically apply a `usb_modeswitch` rule shipped in the
+      driver repo's `udev/` folder so the device boots straight into label
+      mode. See `docs/hardware.md#mass-storage-mode` for details.
+    notes: |
+      Verified end-to-end on Linux after `usb_modeswitch` was applied.
 ```
 
 ### Status semantics
@@ -191,6 +212,35 @@ devices:
 Each transport key takes the same status values **plus** the implicit
 "absent key = not applicable for this device" (e.g. a USB-only printer
 omits `tcp`).
+
+### `quirks` vs `notes`
+
+Two distinct freeform fields at the device level. They serve different
+purposes — keep them apart so the docs site can render them differently.
+
+| Field | Who writes it | When it changes | Renders as |
+|---|---|---|---|
+| `quirks` | Maintainer, editorial | Only when the device's underlying behaviour changes (firmware, hardware revision, new mode discovered) | A prominent callout on the docs site — users see it before reading the table row |
+| `notes` | Rolled up from verification reports + maintainer summary | Each time a new report lands and the rolled-up state is updated | A footnote / tooltip on the table row |
+
+Use `quirks` for things like:
+
+- Hybrid devices that present multiple USB interfaces (e.g. label
+  printer + tape printer in one chassis, or printer + virtual CD-ROM)
+- Devices that boot into a different mode by default and need
+  out-of-band setup (`usb_modeswitch`, kernel module unload, …)
+- Models that share VID/PID with another model but behave differently
+- Firmware-version-dependent behaviour ("only 1.5+ supports auto-cut")
+- Hardware-locked media (e.g. NFC-locked DYMO 550-series)
+- Transport-specific oddities ("WebUSB pairing requires unplug-replug
+  after first connect on Windows")
+- Anything a buyer would want to know *before* committing to the device
+
+Use `notes` for things like:
+
+- "Confirmed two-color printing on DK-22251"
+- "TCP not exercised by reporter; community contributions welcome"
+- "Auto-cut works inconsistently on Windows — issue #57"
 
 ### Update flow
 
@@ -269,6 +319,10 @@ The page also gets:
 - A **"verify your device"** call-to-action linking to the verification
   guide and the issue template.
 - **Per-row links** to the per-driver `/<repo>/hardware` deep page.
+- **A "quirks" indicator** on devices that have a `quirks:` entry — small
+  badge in the row, expanding (or linking) to the full quirk text. Quirky
+  devices also surface in a separate "Read these first" section above the
+  main table for buyers who skim.
 
 ### Per-driver `/<repo>/hardware` page enhancements
 
