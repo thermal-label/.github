@@ -10,6 +10,10 @@ body:
         File this on the **driver repository** for the printer family
         (`thermal-label/brother-ql`, `thermal-label/labelmanager`, or `thermal-label/labelwriter`).
 
+        **First time?** Read the [verification guide](https://github.com/thermal-label/.github/blob/main/CONTRIBUTING/verifying-hardware.md)
+        and the family-specific checklist in your driver repo (`docs/verification-checklist.md`)
+        — they tell you exactly which commands to run and what output to capture.
+
   - type: dropdown
     id: result
     attributes:

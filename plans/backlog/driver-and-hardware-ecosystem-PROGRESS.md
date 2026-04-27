@@ -45,34 +45,49 @@
 
 ## Phase 2 — Unified `/hardware/` page on docs site
 
-- [ ] Bump `*-core` deps (no bump needed — already on 0.2.0; deferred until first new device added post-release per D3)
-- [ ] `scripts/build-hardware-page.mjs`
-- [ ] `docs/.vitepress/components/HardwareTable.vue` (sort/filter/search/URL state/a11y)
-- [ ] `docs/hardware/index.md` (page chrome)
-- [ ] `docs/hardware/_data.json` generated
-- [ ] Wire into `docs:build`
-- [ ] Add `/hardware/` to top-level nav
-- [ ] Per-driver fragment injected into `/<repo>/hardware`
+- [x] Deps unchanged (already on `^0.2.0` for all `*-core`; resolved 0.2.1 brother-ql, 0.2.1 labelmanager, 0.2.2 labelwriter from local node_modules)
+- [x] `scripts/build-hardware-page.mjs` — merges DEVICES + YAML, writes `_data.json`, `index.md`, per-driver `_status-fragment.md`
+- [x] `docs/.vitepress/components/HardwareTable.vue` — sort/multi-facet filter/search/URL state/a11y; no extra deps
+- [x] `docs/hardware/index.md` (page chrome) — generated
+- [x] `docs/hardware/_data.json` generated, gitignored
+- [x] Wired into `docs:build` via new `docs:prep` (chains `docs:pull` → `docs:hardware`)
+- [x] `/hardware/` added to top-level nav in `docs/.vitepress/config.ts`
+- [x] Per-driver `_status-fragment.md` injected via VitePress `<!--@include-->` directive at end of each driver's `docs/hardware.md`
+- [x] `srcExclude: ['**/_*.md']` added so include-only fragments don't leak as routes
 
 ### Gate (docs site)
-- [ ] `npm run docs:build` succeeds
-- [ ] Smoke test: facets toggle, sorts work, search by name + PID, URL hash restores
-- [ ] commit
+- [x] `npm run docs:build` succeeds (5.7 s)
+- [x] Smoke check: `_data.json` contains 36 devices across 3 drivers (19 + 6 + 11), `Hardware coverage` chrome rendered, fragments embedded in `/<driver>/hardware` pages.
+- [ ] commit (next)
+
+### Phase 2 notes
+- Component is `<ClientOnly>`-wrapped; SSR is intentionally skipped because
+  the URL-hash state restoration needs `window`. The static HTML still has
+  the chrome + counts; the table itself hydrates client-side.
+- Build script reads core packages from `node_modules` — pinned versions
+  in `package.json` are the contract per D3.
+- Pre-existing chunk-size warning is unrelated (LiveDemo bundles bring it).
 
 ---
 
 ## Phase 3 — Verification guide + per-driver checklists
 
 ### .github repo
-- [ ] `CONTRIBUTING/verifying-hardware.md`
-- [ ] Update `.github/ISSUE_TEMPLATE/hardware_verification.yml` intro to link guide
+- [x] `CONTRIBUTING/verifying-hardware.md`
+- [x] Issue template intro now links guide + family checklist
 
 ### Each driver repo
-- [ ] `docs/verification-checklist.md`
-- [ ] Link from `docs/hardware.md`
+- [x] `docs/verification-checklist.md` (family-specific)
+- [x] Pointer paragraph from `docs/hardware.md` to local checklist
+
+### Docs site
+- [x] Sidebar: each driver gets a `Verification checklist` entry under its package
+- [x] Build succeeds with all 3 checklists routed
 
 ### Gate (per repo)
-- [ ] commit
+- [x] All 3 drivers: typecheck + lint + test + validate:hardware-status pass
+- [x] Docs site build clean (one fixed dead link en route)
+- [ ] commit (next)
 
 ---
 
