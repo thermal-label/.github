@@ -1,7 +1,7 @@
 # Plan — refactor LiveDemo scaffolding
 
 Date: 2026-04-27
-Status: backlog — spin-off from `THERMAL_LABEL_DOCS_PLAN.md` Phase 4
+Status: implemented — 2026-04-27 (`thermal-label.github.io` 68854ff)
 
 The unified docs site at `thermal-label.github.io` now hosts all three
 per-driver LiveDemos (`BrotherQLDemo.vue`, `LabelManagerDemo.vue`,
@@ -22,18 +22,22 @@ The three components share concept but differ in execution:
 | Concern | brother-ql | labelmanager | labelwriter |
 |---|---|---|---|
 | File size | 647 lines | 481 lines | 494 lines |
-| Tabs | single + two-color | single | single |
 | Media picker | continuous-tape dropdown | tape width (6/9/12) | fixed media |
-| Preview canvas | one + composite for two-color | tape-shaped wrap | label-shaped wrap |
+| Preview canvas | tape-shaped wrap | tape-shaped wrap | label-shaped wrap |
 | Status panel | shared shape | shared shape | adds NFC-lock notice on 550-series |
 | USB pairing | shared pattern | shared pattern | shared pattern |
-| Print path | rotateBitmap + maybe two-color | renderText → bitmapToRawImage | renderText → bitmapToRawImage |
+| Print path | renderText → bitmapToRawImage | renderText → bitmapToRawImage | renderText → bitmapToRawImage |
+
+All three demos are intentionally **black-and-white only**. Richer demos
+(two-color, image upload, density control, etc.) belong on the burnmark.io
+app, not the driver docs site — the LiveDemos here exist to prove the
+driver works against real hardware, not to showcase capabilities.
 
 A naïve "copy-paste each" landed all three, gets the docs site working today,
 and lets us factor out the shared parts in a follow-up where we can compare
 the three side by side.
 
-The right structure (per the original plan §3.2) is:
+The right structure is:
 
 ```
 LiveDemo/
@@ -59,23 +63,25 @@ LiveDemo/
    shape. Lift the template + styles into one component, parameterize
    `printer`, `printerName`, `isConnecting`, `statusMessage`, `statusType`.
 2. **Extract `useUsbPairing` composable** — `connect()` / `disconnect()` /
-   error-state machine. The brother-ql demo dynamically imports
-   `requestPrinter` from the appropriate `*-web` package; that pattern can
-   become a generic `useUsbPairing(importPrinter, getPrinterName)` factory.
+   error-state machine. All three demos must use **dynamic** `requestPrinter`
+   imports (bql and labelwriter already do; labelmanager currently uses a
+   static import — harmonize it). The composable becomes a generic
+   `useUsbPairing(importPrinter, getPrinterName)` factory taking the import
+   function as a parameter.
 3. **Extract `BitmapPreview.vue`** — the per-driver `drawPreview()` /
    `updateSinglePreview()` functions all do "render text → scale to height
-   → draw to canvas with PREVIEW_SCALE px size". Parameterize target height
-   and ink/background colours.
+   → draw to canvas with PREVIEW_SCALE px size". Black-and-white only —
+   parameterize target height; ink and background colours are fixed.
 4. **Extract `TextEditor.vue`** — single text input + label, with optional
-   invert toggle. Two driver demos already use this exact shape; bql's
-   single tab too.
+   invert toggle.
 5. **Refactor each `*Demo.vue`** — recompose using shared components.
-   Driver-specific logic (two-color compose for bql, tape-width picker for
-   labelmanager, NFC-lock notice for labelwriter) stays in the wrapper.
+   Driver-specific logic (tape-width picker for labelmanager, NFC-lock
+   notice for labelwriter, continuous-tape dropdown for bql) stays in the
+   wrapper.
 6. **Browser test** — pair real hardware against each demo. The three
-   driver families need separate verification: Brother QL (USB + two-color
-   on QL-800), DYMO LabelManager (USB), DYMO LabelWriter (USB,
-   plus 550-series NFC lock detection).
+   driver families need separate verification: Brother QL (USB), DYMO
+   LabelManager (USB), DYMO LabelWriter (USB, plus 550-series NFC lock
+   detection).
 
 ---
 
