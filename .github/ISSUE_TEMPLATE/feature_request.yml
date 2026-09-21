@@ -7,7 +7,7 @@ body:
     attributes:
       value: |
         Open this on the repository that owns the package the feature would live in.
-        For broad ecosystem-level ideas, prefer **Discussions** on the org `.github` repo.
+        For ideas that span several packages, open it on `thermal-label/.github`.
 
   - type: textarea
     id: what

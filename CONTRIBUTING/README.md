@@ -8,7 +8,7 @@ guide that matches what you want to do.
 | Concern | Where |
 |---|---|
 | Bug reports for a specific package | The owning repository's **Issues** tab |
-| New ideas, Q&A, "show & tell" | [Org Discussions](https://github.com/thermal-label/.github/discussions) on this repo |
+| Questions and ideas | The closest repository's **Issues** tab (Question template); org-wide topics on [`.github`](https://github.com/thermal-label/.github/issues) |
 | Hardware verification reports | The driver repo's Issues tab (template provided) |
 | Security vulnerabilities | [`SECURITY.md`](../.github/SECURITY.md) — private advisory flow |
 | User-facing documentation | The owning repo's `docs/` folder. The org docs site at [thermal-label.github.io](https://thermal-label.github.io) pulls those at build time. |
