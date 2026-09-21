@@ -468,14 +468,13 @@ Once your driver is on npm and the docs site shows it:
 1. **File a hardware verification on your own repo.** Yes, against
    your own driver — bench results count and become the seed data
    for the unified page. Mark it `selfVerified: true` in the YAML.
-2. **Open a Discussion on `thermal-label/.github`** announcing the
-   driver. Surfaces it to anyone watching the org.
-3. **Set up the maintainer ergonomics**: `PROGRESS.md`,
+2. **Set up the maintainer ergonomics**: `PROGRESS.md`,
    `DECISIONS.md`, `plans/backlog/`, `plans/implemented/`. The
    existing drivers are the template.
-4. **Ask for verification reports.** People with the hardware are
-   out there; they can't volunteer if they don't know. The org's
-   social channels are the easiest way.
+3. **Wait.** Once the docs site rebuilds, your models sit on the
+   hardware matrix with a harness link; that is the announcement,
+   and the unverified cells are the ask. Reports arrive through the
+   harness from people who own the hardware.
 
 ## 14. Maintainer ergonomics — what the org expects
 

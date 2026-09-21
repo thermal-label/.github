@@ -1,0 +1,23 @@
+name: Question
+description: Ask anything that isn't a bug or a feature request — "does X work", "how do I", "is this still active".
+title: "Question: "
+labels: ["question"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Open this on the repository closest to your question (a driver repo for a printer family,
+        `thermal-label/.github` for anything org-wide). No fields are mandatory beyond the question itself.
+
+  - type: textarea
+    id: question
+    attributes:
+      label: Your question
+    validations:
+      required: true
+
+  - type: input
+    id: context
+    attributes:
+      label: Printer or package, if relevant
+      placeholder: "e.g. Marklife X2, @thermal-label/brother-ql-node"

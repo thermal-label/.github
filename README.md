@@ -12,7 +12,7 @@ Org-level metadata, community files, and contributor guides for
 | [`.github/CODE_OF_CONDUCT.md`](./.github/CODE_OF_CONDUCT.md) | Org-wide code of conduct |
 | [`.github/SECURITY.md`](./.github/SECURITY.md) | Security policy + private-disclosure flow |
 | [`.github/PULL_REQUEST_TEMPLATE.md`](./.github/PULL_REQUEST_TEMPLATE.md) | Default PR template (inherited by every repo) |
-| [`.github/ISSUE_TEMPLATE/`](./.github/ISSUE_TEMPLATE) | Default issue templates: bug, feature, hardware verification, new device |
+| [`.github/ISSUE_TEMPLATE/`](./.github/ISSUE_TEMPLATE) | Default issue templates: bug, feature, question, hardware verification, new device |
 | [`.github/FUNDING.yml`](./.github/FUNDING.yml) | GitHub Sponsors + Ko-fi |
 | [`CONTRIBUTING/`](./CONTRIBUTING) | Contributor guides — index, adding a driver (stub), release process, docs conventions |
 | [`plans/`](./plans) | Cross-repo plans archive (`implemented/`, `backlog/`) |
@@ -29,8 +29,9 @@ GitHub uses files in this `.github` repo as fallback for any repository in the
 Per-repo overrides win when present. Drivers and the CLI deliberately do not
 override — they inherit from here so templates stay in sync.
 
-## Discussions
+## Questions and ideas
 
-Org-level [Discussions](https://github.com/thermal-label/.github/discussions)
-on this repo are the funnel for **ideas, Q&A, and "show & tell"**. Bug reports
-and feature asks still go to the relevant repo's Issues tab.
+Everything goes through Issues; Discussions is not enabled. Bug reports,
+feature requests, and questions go to the repo that owns the package (the
+**Question** template needs nothing but the question). Anything org-wide
+goes on this repo.
